@@ -48,6 +48,7 @@ So the function looks like this:
 
 ```math
 f(x) = (x - 8 + 26) % 26
+
 ```
 
 Where `f(x)` is the encrypted alphabetical order of `x`.
