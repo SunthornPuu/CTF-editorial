@@ -47,7 +47,7 @@ Sure it is! For example, if `'B'` got minus 8 (with wrap-around), it becomes `'T
 So the function looks like this:
 
 ```math
-f(x) = (x - 8 + 26) % 26
+f(x) = (x - 8 + 26)%26
 
 ```
 
