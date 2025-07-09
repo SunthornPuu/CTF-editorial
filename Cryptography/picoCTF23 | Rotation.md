@@ -1,4 +1,4 @@
-# 🔐 Rotation  
+# 🔠 Rotation  
 **Credit:** [picoCTF - Rotation Challenge](https://play.picoctf.org/practice/challenge/373)
 
 For beginners, this is a good start in cryptography. Why? Let's see:  
@@ -36,7 +36,7 @@ x q k w = 24 17 11 23
 p i c o = 16  9  3 15
 ```
 
-So, it's just a **+8 shift**.
+So, it's just a **-8 shift**.
 
 What about the uppercase part? Is it the same?
 
