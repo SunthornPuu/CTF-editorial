@@ -1,281 +1,46 @@
-# 🗝️ keygenme-py 
+# 🔑 keygenme-py
+
 **Credit:** [picoCTF - keygenme-py](https://play.picoctf.org/practice/challenge/121)
-Welcome to the funnest (my most favourite) section of CTF
-CODING!!!!!
-this one is a good fresh start for you in programming problem why? Let's see
+
+Welcome to the funnest (my most favourite) section of CTF — **CODING!!!!**
+
+This one is a good fresh start for you in programming problems. Why? Let's see:
+
 ![image](https://github.com/user-attachments/assets/05d8f2d8-8df9-4d3d-9201-085244ab2825)
-given a python file
-
-```python
-#============================================================================#
-#============================ARCANE CALCULATOR===============================#
-#============================================================================#
-
-import hashlib
-from cryptography.fernet import Fernet
-import base64
-
-
-
-# GLOBALS --v
-arcane_loop_trial = True
-jump_into_full = False
-full_version_code = ""
-
-username_trial = "FREEMAN"
-bUsername_trial = b"FREEMAN"
-
-key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
-key_part_dynamic1_trial = "xxxxxxxx"
-key_part_static2_trial = "}"
-key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
-
-star_db_trial = {
-  "Alpha Centauri": 4.38,
-  "Barnard's Star": 5.95,
-  "Luhman 16": 6.57,
-  "WISE 0855-0714": 7.17,
-  "Wolf 359": 7.78,
-  "Lalande 21185": 8.29,
-  "UV Ceti": 8.58,
-  "Sirius": 8.59,
-  "Ross 154": 9.69,
-  "Yin Sector CL-Y d127": 9.86,
-  "Duamta": 9.88,
-  "Ross 248": 10.37,
-  "WISE 1506+7027": 10.52,
-  "Epsilon Eridani": 10.52,
-  "Lacaille 9352": 10.69,
-  "Ross 128": 10.94,
-  "EZ Aquarii": 11.10,
-  "61 Cygni": 11.37,
-  "Procyon": 11.41,
-  "Struve 2398": 11.64,
-  "Groombridge 34": 11.73,
-  "Epsilon Indi": 11.80,
-  "SPF-LF 1": 11.82,
-  "Tau Ceti": 11.94,
-  "YZ Ceti": 12.07,
-  "WISE 0350-5658": 12.09,
-  "Luyten's Star": 12.39,
-  "Teegarden's Star": 12.43,
-  "Kapteyn's Star": 12.76,
-  "Talta": 12.83,
-  "Lacaille 8760": 12.88
-}
-
-
-def intro_trial():
-    print("\n===============================================\n\
-Welcome to the Arcane Calculator, " + username_trial + "!\n")    
-    print("This is the trial version of Arcane Calculator.")
-    print("The full version may be purchased in person near\n\
-the galactic center of the Milky Way galaxy. \n\
-Available while supplies last!\n\
-=====================================================\n\n")
-
-
-def menu_trial():
-    print("___Arcane Calculator___\n\n\
-Menu:\n\
-(a) Estimate Astral Projection Mana Burn\n\
-(b) [LOCKED] Estimate Astral Slingshot Approach Vector\n\
-(c) Enter License Key\n\
-(d) Exit Arcane Calculator")
-
-    choice = input("What would you like to do, "+ username_trial +" (a/b/c/d)? ")
-    
-    if not validate_choice(choice):
-        print("\n\nInvalid choice!\n\n")
-        return
-    
-    if choice == "a":
-        estimate_burn()
-    elif choice == "b":
-        locked_estimate_vector()
-    elif choice == "c":
-        enter_license()
-    elif choice == "d":
-        global arcane_loop_trial
-        arcane_loop_trial = False
-        print("Bye!")
-    else:
-        print("That choice is not valid. Please enter a single, valid \
-lowercase letter choice (a/b/c/d).")
-
-
-def validate_choice(menu_choice):
-    if menu_choice == "a" or \
-       menu_choice == "b" or \
-       menu_choice == "c" or \
-       menu_choice == "d":
-        return True
-    else:
-        return False
-
-
-def estimate_burn():
-  print("\n\nSOL is detected as your nearest star.")
-  target_system = input("To which system do you want to travel? ")
-
-  if target_system in star_db_trial:
-      ly = star_db_trial[target_system]
-      mana_cost_low = ly**2
-      mana_cost_high = ly**3
-      print("\n"+ target_system +" will cost between "+ str(mana_cost_low) \
-+" and "+ str(mana_cost_high) +" stone(s) to project to\n\n")
-  else:
-      # TODO : could add option to list known stars
-      print("\nStar not found.\n\n")
-
-
-def locked_estimate_vector():
-    print("\n\nYou must buy the full version of this software to use this \
-feature!\n\n")
-
-
-def enter_license():
-    user_key = input("\nEnter your license key: ")
-    user_key = user_key.strip()
-
-    global bUsername_trial
-    
-    if check_key(user_key, bUsername_trial):
-        decrypt_full_version(user_key)
-    else:
-        print("\nKey is NOT VALID. Check your data entry.\n\n")
-
-
-def check_key(key, username_trial):
-
-    global key_full_template_trial
-
-    if len(key) != len(key_full_template_trial):
-        return False
-    else:
-        # Check static base key part --v
-        i = 0
-        for c in key_part_static1_trial:
-            if key[i] != c:
-                return False
-
-            i += 1
-
-        # TODO : test performance on toolbox container
-        # Check dynamic part --v
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[1]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
-            return False
-
-
-
-        return True
-
-
-def decrypt_full_version(key_str):
-
-    key_base64 = base64.b64encode(key_str.encode())
-    f = Fernet(key_base64)
-
-    try:
-        with open("keygenme.py", "w") as fout:
-          global full_version
-          global full_version_code
-          full_version_code = f.decrypt(full_version)
-          fout.write(full_version_code.decode())
-          global arcane_loop_trial
-          arcane_loop_trial = False
-          global jump_into_full
-          jump_into_full = True
-          print("\nFull version written to 'keygenme.py'.\n\n"+ \
-                 "Exiting trial version...")
-    except FileExistsError:
-    	sys.stderr.write("Full version of keygenme NOT written to disk, "+ \
-	                  "ERROR: 'keygenme.py' file already exists.\n\n"+ \
-			  "ADVICE: If this existing file is not valid, "+ \
-			  "you may try deleting it and entering the "+ \
-			  "license key again. Good luck")
-
-def ui_flow():
-    intro_trial()
-    while arcane_loop_trial:
-        menu_trial()
-
-
-
-# Encrypted blob of full version
-full_version = \
-b"""
-gAAAAABgT_nvdPbQsvAhvsNvjCeuMqNP4gGInWyNCirwqXlGMM4EDHMeVEIci77G1dQTtGCgsVSeUfJKzwcBldLozZ24_kcrd9fd-a81-z2KBOrI8Qv_IOhY1LqsooySaeEQMvjMqBhhLhoIDfsXBSWnEb8RPDXVzZhc_5WaNDorzw8lUMqf1vLI8bWCP97UnQZclfIa_hH-ib5hy6hXuimvny4X9-eOzEIAROHD5l-FB8r82ZfUiPKED2woAgROd1_PF9HrCN_Poi_b5D42E_-R4fTX5G6ASWexix3vtO9jXW9YqSI4mN-RMoTLcYHe6wAt89e-SnhmmVxdqXzsbx37Z0UNaEEToIaUqEWuI5hHWRx9ytb9GQLimBzBVd3ZS1vuOp4gYaxRzCy8tAR63G3QrEx3mo-XLPRm8ajHVMxlsbc5U9D11znoZKEYZd2zTjTPGxaHwXaQA7hw4ZWHEEQIAUaBtAJtB_Ua0ERrop1xG1P6U-zlAWKzzymqYIV88_yHqChyWta8291J-QTy5sYYsbWygg65G5Ea4G30Eu5I6izqanJMhMFTLcBSKx_b0HBokRvim65ywa8tCh4iYZFHDsOqr2kDgyq2pZuvSRRTEHaPJVct68QScVLmWlBXSIM36ng4izANXH1qWTMxakfHQ52MRKmKhRV3sVUHGgHqdtQWJPnIeKlnWw6bHUtGxAvCQLTgwO6HR3D5EAiHMB6qu5yiAxRJMWophLMIZNN0alYV2VX0Amvd54WqAW9MnO0q1sunAyao7l1JJe6bGYIeKSYwyRiQVKtQ2nOkWXuJCRPY3PsfcT9OAkfKRCowlGF_hPmgCpB3izpUNOAD8HuNrkqKIUhROAOU-WCa04rQ2ig7bETXfJJldPRQGCvHC9zzczQC-ppq1G5PWs_tjT8VwtrrOc_Nb14dGqbLkDuKdPMa09TJKhBto0kD8O0f-JO--TOl51bPSitqTT11E1ZLiRufSojQDDbpFBMTFJNzf5puj4r3JJnDERw0quqGU8IxBPR91ZfKKEjW1U44p5G5GBbHVN1JTb0j4hpQAyKbWQKs7kGIyuToTL0VKR0WBovSeOwR_O4KmDit6ncHHEBXt7FBD6BCWkmUPuiF2QfIIFW83AizJfilZ4YhIOjiBW2J3b7-CJj0Vayq8eZY_ZeDiehwErGeiuxgeH96TZVA3C9-vAnNjdSJLPGLU935tuv74HOsPln5zQCiNyhJ3JZR4BaWLyex3haa1X-XJJZLgeGAVNqtU0ByUR5nLG37tKF9POPEkTH7Z7ujMVtcH9GfK231Fm9giBurP2CQmInoyp_oyuErlBFDPH0p5F8qWx1zcgOUZBTscZPtCzrT4otRh0HCNSV0blYPwxPjvpW2Nqs-ojXjjRgMOS6prdbtTm0eiCMC0DLY9b4YY7Gt5CKYX4HM8eyaY8Z04WPCpVvqEOLTl4NSqUlWRaVEUcbCBQNdyHIFeUbDUrs9PjXa4_WMwbqMnBPzQmBzmx4KqJJZz9RCy7I0BeqP_wy0kcTV5q8SPfZPyz_WoHx65e3z0GCuxZrzN1D7rj_WLsTPp96oCkF3B9yBx81UKXgZodZrUGooEJLxglMTCwX35X_GTh2aIggPah_k8emL1_rX_psDqGlDUPMYj8Af_O1KinL9lylCtHgGYLyGInBzHMgv4ixHPqqHk56YFmsKgqWUwR8g9an8eevQwm9_KAcg6VzreQEYsCjnsGLKvEMHt7ll3QfwhHiW-GHnPWxvhk169hKVaidBXuJuHmOpsQad5eJyvywwg0Hx0cfd6cKi3RS4PQcaYBlQXw7nsQ3xDLk0s6Bv97G3MAyQ_FIi5ieHdWO1FMYW1kbZy3Zrx5muiRmoNEBaTyDVeko8rJ9aaZWEXV1gQdDVAr92bFT_tb2ZImbPc2yJxmynaRV40ZCnVuxmwLVwCq36BSLss6yz_vnUVpswWQ4qKDbFbdPAof9mkNt0fe4Vqe_MC4ZhVvWSlsJhTlMvLedsrTbp3mL2JGvBOfvxwiOGkO-XgW1F7TGMXzh8j-KbTVKHdt6xp3DRs1Uhae5hncMCaIGqq5ocTO9Id-esyaJEumEL7oR-uzYXss3z6rSOjnGDF0k0aWCCFEKMWe1zzYhZis74IsFZ7cCfV0daXkrdD7VFIgor0ifd4-DoLYxIr-eC-yLc7eVouoHHirk0PcrMC2w7SuXReCuYvMt-jcUlZBEphb9D_0IEZDsua_Rl62FwT-1wPzyZg_uGcUviq1h8Bkgh0rs4DBdheLwRg3k6ekdTzPA78bqk5qnSbSyJMD5fK4daKbplPcNFLHTMJzKSAhQeGx0Uw3NS70q_k2uLXvbaagMB5NHzM7ZzH8P5chxcT07hkNNt7dfu9_ux35z6sEIeCmQ-MqvVn4GRBK3zEF2t_PYsQw_da6lbzEiPVWIlqQUkFcmyhsL9hSFDeBkK18abEknjs3cdukrD-e9JRKdxRJxJW97gJM-btsh_5Nbf1pIz-uxQbQhBZQkHOqC4BWyLjg3xT92B-3yDmZnykvk7d8pXNHOwtXSHtBD0jCAdCzUyE9_U51p7icO8toV0sbZ9tj22tPe1DKMM5M2uMHQXCySv4oTGpTGp4xA4tD5Wo_o59zgzwlpXtKukU7cT8DS2NCBRlDW_2L6HojArs2NPeKtBm_-DIDCiSrHSYdiITZq7GaoeyAywiOiqlVNDdLy0p3lcNW_Yo4vXyzfSm8qXTfEpoAb9gPps0LbJhci1sWqNL9JJPI4yIca4r0rr9Y1wIEYuwXeyLoQD_Yn6xPRiVmuGSnco3HsIBOuDoyU3AGQOczn_QZ_TvyIJYdS8op8UJFRMD7W7lJWFe-ivoFdUlAjMqyDCUO_PbAeJYaE0ekh7xh3yudd7dMmD9LcTOi_LQoEfYjPXIEQPaC7D_SDYw8AbBJ51FyKSif7n_fW6_PU0U6vfYZwbPWU5tp0nNjTuaPxI_88tyuZC_2gW3YgAIWs4vo0zWBk9AvdgfxNwFiIdp4dugGGg0-dJp_SW_XzgGv1ALkaMbxiOYSK0sE8ZXb3_5zA3vUn2OsKpCq6ROt4poLIFce_Cot1RSU3FUYie2V4GT7ChUrq-vJfTPVlixee1gSPE7TnlyAm_kANyQ3_VFgIyEiEfGBLb_mlIWbVCO9e9QC6_SDKbc8UvuXodJ9HcDe-yWTjV7V-7s7-Qhp_WSIBVwex8tmyCo5W69An5eOrPRwK5NfCFp0uJClvim9qfLnVDXc5QQmajx61VuwnCVZg82iWxMh_Jms-2EiaCEz1oyB87F_awJ413I_kT8Wa6OW1ZhadZkDS5IVEZTNYwIxeIaVUoZLSBESHwwwzD7zsR02pGlJFJcWcvdI96wtCcx1os6g_Lq7tpTwd33zCA-RgYZWTHKPnFSi1z0h-RsyCIqbBmGx2eswpfJbKRKi_QFQMw60w7O41FWQL8ZluxBOSd3kSP5xyVJC7bnDfE3g_OnBdU5MFQGl6uFaIxr1lUt98GeD6Gt2X1A-Hi1zOF4iaxCbb9h9FECqUrwGlwGo_TY_W0ekFM1UXFVVcUwsCwm5hL_wC7hCcN5Ad4dWx9EAL4NX3_N8n9qC3hW_l34Cq5V4Xzm1O7T7py7XF_CZ_Xd_GDdU89f2hrV1IngHqey_fc9lTroIhoLeZ3v2nj7_9osKs7qLHa_QwnwQ5jH0LxhAOGS9FHLBGdn3tXnRyzglLLOTP3XR1qeoSOEqz4Uk13qfI3GRiHacUnyyyT2OHdi4IsrxlxzGNEjBMDws9FPjXH4Xv_R0iSeD77JBIKqgd0n0hxaZRu8lOUhmnJFHpe6OrnmK8nB4A-yHuI5z37zC3KJDgKxnBBs8zfAOP0-g==
-"""
-
-
-
-# Enter main loop
-ui_flow()
-
-if jump_into_full:
-    exec(full_version_code)
-```
-pretty long right? but don't you worry this one is easy peacy i will guide you through all of this myself
 
 ---
 
 ## 🔎 Observation
-take a look at these code To start at any debugging/reverse engineering you need to know "WHAT IS THE CODE DOING"
+
+Take a look at this code. To start debugging/reverse engineering, you need to know: **"WHAT IS THE CODE DOING?"**
+
 ![CODE](https://github.com/user-attachments/assets/a0a07ac2-5896-487c-9a0e-b51af68918d1)
-lets take an observation of this code lets summarize its flow
-start with the main loop calling ui flow function which will show you the menu to select an operation [call menu_trial function]
-and at the menu you will see 4 options take your common sense out of pocket and you will read the flow of the option C [go to enter_license function]
-you may ask why that's so simple if you need to know how to unlock the door just takke a alook inside the key hole
-here we are in the enter_license let's see how key work on this key hole oh! here we are 
+
+Let's take an observation of this code. Let's summarize its flow:
+
+* Start with the main loop calling `ui_flow()` function
+* This will show the menu to select an operation \[calls `menu_trial()`]
+* In the menu, you will see 4 options. Use your common sense and follow the flow of option C \[go to `enter_license()`]
+
+You may ask: "Why?" — That's so simple. If you want to unlock the door, just take a look inside the keyhole.
+
+Here we are in `enter_license()` — let's see how the key works with this keyhole. Oh! Here we are:
+
 ```python
 if check_key(user_key, bUsername_trial):
-        decrypt_full_version(user_key)
+    decrypt_full_version(user_key)
 ```
-the whole thing is actually here! you can either go check check_key function or decrypt_full_version function
-if you wonder why let's me explain
-the section is actually like this
-```
-if the key is right then open the fucking door
+
+The whole thing is actually here! You can either check `check_key()` or `decrypt_full_version()`.
+
+If you're wondering why, let me explain:
 
 ```
-so checking out either "what does the right key look like" or "how will you open the door if i give you the right key" is fine
-i'm kinda lazy so let's take a look inside the keyhole first [go to decrypt_full_version function]
+if the key is right then open the fucking door
+```
+
+So, checking either "what does the right key look like" or "how do you open the door if I give you the right key" is fine.
+I'm kinda lazy, so let's take a look inside the keyhole first \[go to `decrypt_full_version()`]:
 
 ```python
 def decrypt_full_version(key_str):
@@ -285,32 +50,36 @@ def decrypt_full_version(key_str):
 
     try:
         with open("keygenme.py", "w") as fout:
-          global full_version
-          global full_version_code
-          full_version_code = f.decrypt(full_version)
-          fout.write(full_version_code.decode())
-          global arcane_loop_trial
-          arcane_loop_trial = False
-          global jump_into_full
-          jump_into_full = True
-          print("\nFull version written to 'keygenme.py'.\n\n"+ \
-                 "Exiting trial version...")
+            global full_version
+            global full_version_code
+            full_version_code = f.decrypt(full_version)
+            fout.write(full_version_code.decode())
+            global arcane_loop_trial
+            arcane_loop_trial = False
+            global jump_into_full
+            jump_into_full = True
+            print("\nFull version written to 'keygenme.py'.\n\n" +
+                  "Exiting trial version...")
     except FileExistsError:
-    	sys.stderr.write("Full version of keygenme NOT written to disk, "+ \
-	                  "ERROR: 'keygenme.py' file already exists.\n\n"+ \
-			  "ADVICE: If this existing file is not valid, "+ \
-			  "you may try deleting it and entering the "+ \
-			  "license key again. Good luck")
+        sys.stderr.write("Full version of keygenme NOT written to disk, " +
+                         "ERROR: 'keygenme.py' file already exists.\n\n" +
+                         "ADVICE: If this existing file is not valid, " +
+                         "you may try deleting it and entering the " +
+                         "license key again. Good luck")
 ```
-ok the next question is "where is the license key i want" ask yourself first don't read the spoiler yet
 
+Okay, the next question is: **"Where is the license key I want?"** — ask yourself first. Don't read the spoiler yet.
+
+```python
 key_base64 = base64.b64encode(key_str.encode())
 f = Fernet(key_base64)
 full_version_code = f.decrypt(full_version)
 fout.write(full_version_code.decode())
+```
 
-here we are!
-we can use this part to reverse the function but won't it be too cpmplex let's take an observation on the other hand [go to check_key function]
+Here we are!
+We can use this part to reverse the function, but won’t that be too complex?
+Let’s take an observation from the other side \[go to `check_key()`]:
 
 ```python
 def check_key(key, username_trial):
@@ -320,77 +89,54 @@ def check_key(key, username_trial):
     if len(key) != len(key_full_template_trial):
         return False
     else:
-        # Check static base key part --v
         i = 0
         for c in key_part_static1_trial:
             if key[i] != c:
                 return False
-
             i += 1
 
-        # TODO : test performance on toolbox container
-        # Check dynamic part --v
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[1]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
-            return False
-
-
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[4]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[5]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[3]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[6]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[2]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[7]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[1]: return False
+        i += 1
+        if key[i] != hashlib.sha256(username_trial).hexdigest()[8]: return False
 
         return True
 ```
-this function is returning boolean true/false
-and also it mention three variables 'username_trial','key_full_template_trial' and 'key_part_static1_trial'
-which you will notice it locally on the top of the code (please use ctrl+f don't go bruteforce scrolling like monkey) 
+
+This function returns a boolean `True` or `False`.
+It also mentions three variables: `username_trial`, `key_full_template_trial`, and `key_part_static1_trial`,
+which you'll notice locally at the top of the code (please use **Ctrl+F** — don't bruteforce scroll like a monkey):
 
 ```python
 username_trial = "FREEMAN"
-
 key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
 key_part_dynamic1_trial = "xxxxxxxx"
 key_part_static2_trial = "}"
 key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
 ```
-so key_full_template_trial which was the key template is a combined of three part
-and what this function really do is using variable 'i' to iterate all over the index of key given by a user to check if it matches what the correct key is
-YEAH here we go that's actually the full sol of this problem
-after the key_part_static1_trial part it use 'hashlib.sha256(username_trial).hexdigest()[]' kinda stuff which will return character back
-go print all the character variable 'i' was iterating
 
-```
+So `key_full_template_trial`, which is the key template, is a combination of three parts.
+
+What this function really does is use the variable `i` to iterate over the key's characters,
+checking if it matches what the correct key should be.
+
+YEAH here we go — that’s actually the **full solution** of this problem!
+After the `key_part_static1_trial`, it uses `hashlib.sha256(username_trial).hexdigest()[X]` to extract some characters.
+
+Go print them yourself:
+
+```python
 username_trial = b"FREEMAN"
 import hashlib
 print(hashlib.sha256(username_trial).hexdigest()[4])
@@ -402,14 +148,20 @@ print(hashlib.sha256(username_trial).hexdigest()[7])
 print(hashlib.sha256(username_trial).hexdigest()[1])
 print(hashlib.sha256(username_trial).hexdigest()[8])
 ```
-that's all for key_part_dynamic1_trial YAY!
----
-this is actually a good problem though it was a good meter to see if you're good at flow reading and that was one of the most-wanted skill of developer
-Recently Ive got an invitation to a dev team by a junior dev and im wondering how good he is at coding logic so i sent him this problem and He took so long to figure it out (thats kinda disappointed btw)
-anyway If you don't get it — go learn CP. It will help you a lot in programming.
 
-If you don't get any part, feel free to ask me.  
-📩 IG: [a_phkhn](https://www.instagram.com/a_phkhn)
+That’s all for `key_part_dynamic1_trial` — **YAY!**
+
+---
+
+This is actually a **good problem** — it’s a good meter to test if you’re good at **flow reading**, one of the most-wanted skills of a developer.
+
+Recently, I got invited to a dev team by a junior dev. I was wondering how good he was at coding logic,
+so I sent him this problem. He took so long to figure it out (that’s kinda disappointing btw).
+
+Anyway, if you don’t get it — go learn CP. It will help you a lot in programming.
+
+If you don't get any part, feel free to ask me.
+📩 IG: [a\_phkhn](https://www.instagram.com/a_phkhn)
 
 ---
 
