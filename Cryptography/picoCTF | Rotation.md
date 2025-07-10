@@ -1,5 +1,5 @@
 # 🔠 Rotation  
-**Credit:** [picoCTF - Rotation Challenge](https://play.picoctf.org/practice/challenge/373)
+**Credit:** [picoCTF - rotation](https://play.picoctf.org/practice/challenge/373)
 
 For beginners, this is a good start in cryptography. Why? Let's see:  
 ![image](https://github.com/user-attachments/assets/10a35568-d8fa-42bf-9b76-49e6a3d0996a)
